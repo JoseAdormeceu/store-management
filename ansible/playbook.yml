@@ -1,0 +1,23 @@
+---
+- name: Deploy Store Management
+  hosts: localhost
+  connection: local
+  become: false
+
+  tasks:
+    - name: Pull latest frontend image
+      command: docker pull josecomsono/store-frontend:latest
+
+    - name: Pull latest backend image
+      command: docker pull josecomsono/store-backend:latest
+
+    - name: Stop existing containers
+      command: docker-compose down
+      args:
+        chdir: "{{ playbook_dir }}/.."
+      ignore_errors: yes
+
+    - name: Start containers
+      command: docker-compose up -d
+      args:
+        chdir: "{{ playbook_dir }}/.."

@@ -35,17 +35,17 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                sh 'docker-compose down || true'
-                sh 'docker-compose up -d --build --force-recreate'
+                sh 'ansible-playbook ansible/playbook.yml'
             }
         }
     }
-post {
-    success {
-        echo 'Pipeline concluída com sucesso!'
+
+    post {
+        success {
+            echo 'Pipeline concluída com sucesso!'
+        }
+        failure {
+            echo 'Pipeline falhou! Verifica o Jenkins para mais detalhes.'
+        }
     }
-    failure {
-        echo 'Pipeline falhou! Verifica o Jenkins para mais detalhes.'
-    }
-}
 }
