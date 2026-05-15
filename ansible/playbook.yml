@@ -41,7 +41,7 @@
 
     - name: Copy docker-compose file
       copy:
-        src: "{{ playbook_dir }}/../docker-compose.yml"
+        src: "{{ playbook_dir }}/../docker-compose.aws.yml"
         dest: /home/ubuntu/docker-compose.yml
 
     - name: Stop existing containers
