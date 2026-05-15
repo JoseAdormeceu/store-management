@@ -1,5 +1,5 @@
 ---
-- name: Deploy Store Management
+- name: Deploy Store Management (Local)
   hosts: local
   connection: local
   become: false
@@ -21,3 +21,32 @@
       command: docker-compose up -d
       args:
         chdir: "{{ playbook_dir }}/.."
+
+- name: Deploy Store Management (AWS)
+  hosts: aws
+  become: true
+
+  tasks:
+    - name: Install docker-compose
+      get_url:
+        url: https://github.com/docker/compose/releases/download/v2.24.0/docker-compose-linux-x86_64
+        dest: /usr/local/bin/docker-compose
+        mode: '0755'
+
+    - name: Pull latest frontend image
+      command: docker pull josecomsono/store-frontend:latest
+
+    - name: Pull latest backend image
+      command: docker pull josecomsono/store-backend:latest
+
+    - name: Copy docker-compose file
+      copy:
+        src: "{{ playbook_dir }}/../docker-compose.yml"
+        dest: /home/ubuntu/docker-compose.yml
+
+    - name: Stop existing containers
+      command: docker-compose -f /home/ubuntu/docker-compose.yml down
+      ignore_errors: yes
+
+    - name: Start containers
+      command: docker-compose -f /home/ubuntu/docker-compose.yml up -d
