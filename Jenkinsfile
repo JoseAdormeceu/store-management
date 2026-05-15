@@ -40,19 +40,12 @@ pipeline {
             }
         }
     }
-
-    post {
-        success {
-            echo 'Pipeline concluída com sucesso!'
-            mail to: 'josemourastoremanager@gmail.com',
-                 subject: "SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                 body: "A pipeline ${env.JOB_NAME} correu com sucesso!"
-        }
-        failure {
-            echo 'Pipeline falhou!'
-            mail to: 'josemourastoremanager@gmail.com',
-                 subject: "FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                 body: "A pipeline ${env.JOB_NAME} falhou. Verifica o Jenkins para mais detalhes."
-        }
+post {
+    success {
+        echo 'Pipeline concluída com sucesso!'
     }
+    failure {
+        echo 'Pipeline falhou! Verifica o Jenkins para mais detalhes.'
+    }
+}
 }
