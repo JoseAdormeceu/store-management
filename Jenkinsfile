@@ -35,17 +35,35 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                sh 'ansible-playbook ansible/playbook.yml'
+                sh 'ansible-playbook ansible/playbook.yml -i ansible/inventory.ini'
             }
         }
     }
 
     post {
         success {
-            echo 'Pipeline concluída com sucesso!'
+            mail to: 'josemourastoremanager@gmail.com',
+                 subject: "Store Management — Nova versão disponível",
+                 body: """Uma nova versão da aplicação Store Management foi deployada com sucesso.
+
+A aplicação está disponível em:
+- Loja: http://localhost:80
+- API: http://localhost:3000
+
+O que foi atualizado: ${env.GIT_BRANCH} — commit ${env.GIT_COMMIT}
+
+Equipa de Desenvolvimento"""
         }
         failure {
-            echo 'Pipeline falhou! Verifica o Jenkins para mais detalhes.'
+            mail to: 'josemourastoremanager@gmail.com',
+                 subject: "Store Management — Falha no deploy",
+                 body: """O deploy de uma nova versão da aplicação Store Management falhou.
+
+A versão anterior continua em funcionamento.
+
+Por favor verifica os logs em: ${env.BUILD_URL}
+
+Equipa de Desenvolvimento"""
         }
     }
 }

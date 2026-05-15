@@ -1,6 +1,6 @@
 ---
 - name: Deploy Store Management
-  hosts: localhost
+  hosts: local
   connection: local
   become: false
 
