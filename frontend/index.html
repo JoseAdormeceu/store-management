@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Store Management</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; }
+    h1 { color: #333; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
+    th { background: #f4f4f4; }
+    input { padding: 8px; margin: 5px; border: 1px solid #ddd; border-radius: 4px; }
+    button { padding: 8px 16px; margin: 5px; border: none; border-radius: 4px; cursor: pointer; }
+    .btn-add { background: #28a745; color: white; }
+    .btn-edit { background: #007bff; color: white; }
+    .btn-delete { background: #dc3545; color: white; }
+    .form-section { background: #f9f9f9; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+  </style>
+</head>
+<body>
+  <h1>🏪 Store Management</h1>
+
+  <div class="form-section">
+    <h2 id="form-title">Adicionar Loja</h2>
+    <input type="hidden" id="store-id" />
+    <input type="text" id="store-name" placeholder="Nome da loja" />
+    <input type="text" id="store-location" placeholder="Localização" />
+    <button class="btn-add" onclick="saveStore()">Guardar</button>
+    <button onclick="resetForm()">Cancelar</button>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Localização</th>
+        <th>Criado em</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody id="stores-table"></tbody>
+  </table>
+
+  <script>
+    const API = 'http://localhost:3000';
+
+    async function loadStores() {
+      const res = await fetch(`${API}/stores`);
+      const stores = await res.json();
+      const tbody = document.getElementById('stores-table');
+      tbody.innerHTML = stores.map(s => `
+        <tr>
+          <td>${s.id}</td>
+          <td>${s.name}</td>
+          <td>${s.location || '-'}</td>
+          <td>${new Date(s.created_at).toLocaleDateString('pt-PT')}</td>
+          <td>
+            <button class="btn-edit" onclick="editStore(${s.id}, '${s.name}', '${s.location}')">Editar</button>
+            <button class="btn-delete" onclick="deleteStore(${s.id})">Apagar</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    async function saveStore() {
+      const id = document.getElementById('store-id').value;
+      const name = document.getElementById('store-name').value;
+      const location = document.getElementById('store-location').value;
+
+      if (!name) return alert('Nome é obrigatório!');
+
+      if (id) {
+        await fetch(`${API}/stores/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, location })
+        });
+      } else {
+        await fetch(`${API}/stores`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, location })
+        });
+      }
+
+      resetForm();
+      loadStores();
+    }
+
+    function editStore(id, name, location) {
+      document.getElementById('store-id').value = id;
+      document.getElementById('store-name').value = name;
+      document.getElementById('store-location').value = location;
+      document.getElementById('form-title').textContent = 'Editar Loja';
+    }
+
+    async function deleteStore(id) {
+      if (!confirm('Tens a certeza?')) return;
+      await fetch(`${API}/stores/${id}`, { method: 'DELETE' });
+      loadStores();
+    }
+
+    function resetForm() {
+      document.getElementById('store-id').value = '';
+      document.getElementById('store-name').value = '';
+      document.getElementById('store-location').value = '';
+      document.getElementById('form-title').textContent = 'Adicionar Loja';
+    }
+
+    loadStores();
+  </script>
+</body>
+</html>
