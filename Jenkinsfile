@@ -42,9 +42,20 @@ pipeline {
 
     post {
         success {
-            mail to: 'josemourastoremanager@gmail.com',
-                 subject: "Store Management — Nova versão disponível",
-                 body: """Uma nova versão da aplicação Store Management foi deployada com sucesso.
+            script {
+                def stores = sh(
+                    script: 'docker exec store-management-db-1 psql -U postgres -d storedb -t -c "SELECT json_agg(row_to_json(stores)) FROM stores;"',
+                    returnStdout: true
+                ).trim()
+
+                def products = sh(
+                    script: 'docker exec store-management-db-1 psql -U postgres -d storedb -t -c "SELECT json_agg(row_to_json(products)) FROM products;"',
+                    returnStdout: true
+                ).trim()
+
+                mail to: 'josemourastoremanager@gmail.com',
+                     subject: "Store Management — Nova versão disponível",
+                     body: """Uma nova versão da aplicação Store Management foi deployada com sucesso.
 
 A aplicação está disponível em:
 - Loja: http://localhost:80
@@ -52,7 +63,16 @@ A aplicação está disponível em:
 
 O que foi atualizado: ${env.GIT_BRANCH} — commit ${env.GIT_COMMIT}
 
+--- Estado atual da base de dados ---
+
+Lojas:
+${stores}
+
+Produtos:
+${products}
+
 Equipa de Desenvolvimento"""
+            }
         }
         failure {
             mail to: 'josemourastoremanager@gmail.com',
