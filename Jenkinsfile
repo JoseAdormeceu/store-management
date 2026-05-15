@@ -15,7 +15,7 @@ pipeline {
 
         stage('Build Frontend') {
             steps {
-                sh 'test trigger failure'
+                sh 'docker build -t $DOCKERHUB_USERNAME/store-frontend:latest ./frontend'
             }
         }
 
