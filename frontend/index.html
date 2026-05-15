@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Store Management</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -15,7 +15,7 @@
       --success: #16a34a;
       --purple: #7c3aed;
       --gray: #6b7280;
-      --bg: #f8fafc;
+      --bg: #f1f5f9;
       --surface: #ffffff;
       --border: #e2e8f0;
       --text: #1e293b;
@@ -30,24 +30,24 @@
     }
 
     header {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 1rem 2rem;
+      background: var(--primary);
+      padding: 1.25rem 2rem;
       display: flex;
       align-items: center;
-      gap: 1rem;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      justify-content: space-between;
+      box-shadow: 0 2px 8px rgba(37,99,235,0.3);
     }
 
     header h1 {
-      font-size: 1.25rem;
-      font-weight: 600;
-      color: var(--primary);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: white;
+      letter-spacing: -0.01em;
     }
 
     header span {
-      font-size: 0.85rem;
-      color: var(--muted);
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.7);
     }
 
     main {
@@ -56,20 +56,29 @@
       padding: 0 2rem;
     }
 
+    .page-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: var(--text);
+    }
+
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: 14px;
       padding: 1.5rem;
       margin-bottom: 1.5rem;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
 
     .card h2 {
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 600;
       margin-bottom: 1rem;
-      color: var(--text);
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
 
     .form-row {
@@ -81,34 +90,50 @@
 
     input[type="text"],
     input[type="number"] {
-      padding: 0.5rem 0.75rem;
-      border: 1px solid var(--border);
+      padding: 0.6rem 0.9rem;
+      border: 1.5px solid var(--border);
       border-radius: 8px;
       font-size: 0.9rem;
       font-family: inherit;
       outline: none;
-      transition: border 0.2s;
+      transition: border 0.2s, box-shadow 0.2s;
+      background: var(--bg);
     }
 
-    input:focus { border-color: var(--primary); }
+    input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+      background: white;
+    }
 
     button {
-      padding: 0.5rem 1rem;
+      padding: 0.6rem 1.1rem;
       border: none;
       border-radius: 8px;
       font-size: 0.85rem;
       font-family: inherit;
-      font-weight: 500;
+      font-weight: 600;
       cursor: pointer;
-      transition: opacity 0.2s;
+      transition: transform 0.1s, opacity 0.2s;
     }
 
-    button:hover { opacity: 0.85; }
+    button:active { transform: scale(0.97); }
+    button:hover { opacity: 0.88; }
 
     .btn-primary { background: var(--primary); color: white; }
     .btn-danger { background: var(--danger); color: white; }
     .btn-purple { background: var(--purple); color: white; }
-    .btn-gray { background: var(--gray); color: white; }
+    .btn-gray { background: #e2e8f0; color: var(--text); }
+    .btn-back {
+      background: none;
+      border: 1.5px solid var(--border);
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-bottom: 1.25rem;
+    }
+    .btn-back:hover { background: var(--bg); opacity: 1; }
 
     table {
       width: 100%;
@@ -120,48 +145,44 @@
       text-align: left;
       padding: 0.75rem 1rem;
       background: var(--bg);
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1.5px solid var(--border);
       font-weight: 600;
       color: var(--muted);
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
     }
 
     tbody td {
-      padding: 0.85rem 1rem;
+      padding: 0.9rem 1rem;
       border-bottom: 1px solid var(--border);
       color: var(--text);
+      vertical-align: middle;
     }
 
     tbody tr:last-child td { border-bottom: none; }
-    tbody tr:hover { background: var(--bg); }
+    tbody tr:hover { background: #f8fafc; }
 
-    .actions { display: flex; gap: 0.5rem; }
-
-    .breadcrumb {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 1.5rem;
-      font-size: 0.9rem;
-      color: var(--muted);
-    }
-
-    .breadcrumb span { color: var(--primary); font-weight: 500; cursor: pointer; }
-    .breadcrumb span:hover { text-decoration: underline; }
-
-    .hidden { display: none; }
+    .actions { display: flex; gap: 0.4rem; }
 
     .badge {
       display: inline-block;
-      padding: 0.2rem 0.6rem;
+      padding: 0.2rem 0.65rem;
       border-radius: 999px;
       font-size: 0.75rem;
-      font-weight: 500;
+      font-weight: 600;
       background: #dbeafe;
       color: var(--primary);
     }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .hidden { display: none; }
   </style>
 </head>
 <body>
@@ -175,6 +196,8 @@
 
     <!-- STORES VIEW -->
     <div id="stores-view">
+      <p class="page-title">Lojas</p>
+
       <div class="card">
         <h2 id="store-form-title">Nova Loja</h2>
         <div class="form-row">
@@ -187,7 +210,7 @@
       </div>
 
       <div class="card">
-        <h2>Lojas</h2>
+        <h2>Lista de Lojas</h2>
         <table>
           <thead>
             <tr>
@@ -205,19 +228,19 @@
 
     <!-- PRODUCTS VIEW -->
     <div id="products-view" class="hidden">
-      <div class="breadcrumb">
-        <span onclick="showStores()">Lojas</span>
-        <span>/</span>
-        <span id="breadcrumb-store"></span>
-        <span>/ Produtos</span>
-      </div>
+
+      <button class="btn-back" onclick="showStores()">
+        &#8592; Voltar às Lojas
+      </button>
+
+      <p class="page-title" id="products-title">Produtos</p>
 
       <div class="card">
         <h2 id="product-form-title">Novo Produto</h2>
         <div class="form-row">
           <input type="hidden" id="product-id" />
           <input type="text" id="product-name" placeholder="Nome do produto" />
-          <input type="number" id="product-price" placeholder="Preço" step="0.01" />
+          <input type="number" id="product-price" placeholder="Preço (€)" step="0.01" />
           <input type="number" id="product-stock" placeholder="Stock" />
           <button class="btn-primary" onclick="saveProduct()">Guardar</button>
           <button class="btn-gray" onclick="resetProductForm()">Cancelar</button>
@@ -225,7 +248,7 @@
       </div>
 
       <div class="card">
-        <h2>Produtos</h2>
+        <h2>Lista de Produtos</h2>
         <table>
           <thead>
             <tr>
@@ -253,12 +276,12 @@
       const stores = await res.json();
       const tbody = document.getElementById('stores-table');
       tbody.innerHTML = stores.length === 0
-        ? '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:2rem">Nenhuma loja encontrada</td></tr>'
+        ? '<tr><td colspan="5"><div class="empty-state">Nenhuma loja encontrada. Cria a primeira loja acima.</div></td></tr>'
         : stores.map(s => `
           <tr>
             <td><span class="badge">${s.id}</span></td>
-            <td>${s.name}</td>
-            <td>${s.location || '-'}</td>
+            <td><strong>${s.name}</strong></td>
+            <td>${s.location || '—'}</td>
             <td>${new Date(s.created_at).toLocaleDateString('pt-PT')}</td>
             <td class="actions">
               <button class="btn-purple" onclick="showProducts(${s.id}, '${s.name}')">Produtos</button>
@@ -313,7 +336,7 @@
     // ── PRODUCTS ─────────────────────────────────────────
     function showProducts(storeId, storeName) {
       currentStoreId = storeId;
-      document.getElementById('breadcrumb-store').textContent = storeName;
+      document.getElementById('products-title').textContent = `Produtos — ${storeName}`;
       document.getElementById('stores-view').classList.add('hidden');
       document.getElementById('products-view').classList.remove('hidden');
       loadProducts();
@@ -322,6 +345,7 @@
     function showStores() {
       document.getElementById('products-view').classList.add('hidden');
       document.getElementById('stores-view').classList.remove('hidden');
+      resetProductForm();
       loadStores();
     }
 
@@ -330,11 +354,11 @@
       const products = await res.json();
       const tbody = document.getElementById('products-table');
       tbody.innerHTML = products.length === 0
-        ? '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:2rem">Nenhum produto encontrado</td></tr>'
+        ? '<tr><td colspan="5"><div class="empty-state">Nenhum produto encontrado. Adiciona o primeiro produto acima.</div></td></tr>'
         : products.map(p => `
           <tr>
             <td><span class="badge">${p.id}</span></td>
-            <td>${p.name}</td>
+            <td><strong>${p.name}</strong></td>
             <td>${parseFloat(p.price).toFixed(2)} €</td>
             <td>${p.stock}</td>
             <td class="actions">
