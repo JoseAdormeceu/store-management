@@ -135,6 +135,21 @@
     }
     .btn-back:hover { background: var(--bg); opacity: 1; }
 
+    .btn-notify {
+      background: rgba(255,255,255,0.15);
+      color: white;
+      border: 1.5px solid rgba(255,255,255,0.4);
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-notify:hover { background: rgba(255,255,255,0.25); opacity: 1; }
+    .btn-notify:disabled { opacity: 0.6; cursor: not-allowed; }
+
     table {
       width: 100%;
       border-collapse: collapse;
@@ -189,7 +204,12 @@
 
   <header>
     <h1>Store Management</h1>
-    <span>Plataformas de Desenvolvimento 2025/26</span>
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <button class="btn-notify" id="notify-btn" onclick="sendReport()">
+        📦 Enviar Relatório de Inventário
+      </button>
+      <span>Plataformas de Desenvolvimento 2025/26</span>
+    </div>
   </header>
 
   <main>
@@ -267,8 +287,25 @@
   </main>
 
   <script>
-const API = 'https://jo7ycsp0q5.execute-api.us-east-1.amazonaws.com';
+    const API = 'https://jo7ycsp0q5.execute-api.us-east-1.amazonaws.com';
     let currentStoreId = null;
+
+    // ── NOTIFY ───────────────────────────────────────────
+    async function sendReport() {
+      const btn = document.getElementById('notify-btn');
+      btn.textContent = '⏳ A enviar...';
+      btn.disabled = true;
+      try {
+        await fetch(`${API}/notify`, { method: 'POST' });
+        btn.textContent = '✅ Email enviado!';
+      } catch (err) {
+        btn.textContent = '❌ Erro!';
+      }
+      setTimeout(() => {
+        btn.textContent = '📦 Enviar Relatório de Inventário';
+        btn.disabled = false;
+      }, 3000);
+    }
 
     // ── STORES ──────────────────────────────────────────
     async function loadStores() {
